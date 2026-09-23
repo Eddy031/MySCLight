@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventaire — Encyclopédie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ==== EN-TETE ==== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◈</span>
+      <div class="brand-text">
+        <h1>MyProd</h1>
+        <span class="brand-sub">By Xfury</span>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="produits">Produits</button>
+      <button class="tab-btn" data-tab="multi">Multi</button>
+      <button class="tab-btn" data-tab="ship">Ship</button>
+      <button class="tab-btn" data-tab="sm">SM</button>
+      <button class="tab-btn" data-tab="stats">Statistiques</button>
+    </nav>
+  </header>
+
+  <!-- ==== ONGLET PRODUITS ==== -->
+  <main id="tab-produits" class="tab-panel active">
+
+    <div class="toolbar">
+      <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="search-input" placeholder="Rechercher un produit…" autocomplete="off">
+      </div>
+      <select id="category-filter">
+        <option value="">Toutes les catégories</option>
+      </select>
+      <div class="result-count" id="result-count">— objets</div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="products-table">
+        <thead>
+          <tr>
+            <th data-sort="name" class="sortable">Nom <span class="sort-arrow"></span></th>
+            <th>Catégorie</th>
+            <th data-sort="price" class="sortable num">Prix <span class="sort-arrow"></span></th>
+            <th data-sort="weight" class="sortable num">Poids <span class="sort-arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="products-tbody">
+          <tr><td colspan="4" class="loading-row">Chargement…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- ==== ONGLET MULTI ==== -->
+  <main id="tab-multi" class="tab-panel">
+    <div class="multi-layout">
+
+      <!-- ---- Colonne gauche : recherche par categorie ---- -->
+      <div class="multi-col multi-col-left">
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="multi-search-input" placeholder="Rechercher un produit…" autocomplete="off">
+          </div>
+          <select id="multi-category-filter">
+            <option value="">Choisir une catégorie</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table id="multi-products-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th class="num">Quantité</th>
+              </tr>
+            </thead>
+            <tbody id="multi-products-tbody">
+              <tr><td colspan="2" class="empty-row">Choisissez une catégorie pour afficher les produits</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button id="multi-validate-qty-btn" class="tree-open-btn">Valider les produits et quantités.</button>
+      </div>
+
+      <!-- ---- Colonne droite : selection definitive + arbre ---- -->
+      <div class="multi-col multi-col-right">
+        <div class="table-wrap">
+          <table id="multi-selected-table">
+            <thead>
+              <tr><th colspan="2">Sélection Définitive :</th></tr>
+            </thead>
+            <tbody id="multi-selected-list">
+              <tr><td colspan="2" class="empty-row">Aucun produit sélectionné</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button id="multi-tree-btn" class="tree-open-btn" disabled>Valider la Sélection définitive et afficher l'arbre de fabrication complet ↦</button>
+        <button id="multi-reset-selection-btn" class="tree-open-btn">Réinitialiser la sélection définitive</button>
+        <button id="multi-save-config-btn" class="tree-open-btn">Sauvegarde de la configuration base</button>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Configurations Base Sauvegardées</h3>
+          </div>
+          <div class="table-wrap">
+            <table id="multi-saved-configs-table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Date</th>
+                  <th class="num">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="multi-saved-configs-tbody">
+                <tr><td colspan="3" class="empty-row">Aucune configuration sauvegardée</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==== ONGLET SHIP ==== -->
+  <main id="tab-ship" class="tab-panel">
+    <div class="multi-layout">
+
+      <!-- ---- Colonne gauche : choix des outils ---- -->
+      <div class="multi-col multi-col-left">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Choix des outils</h3>
+            <span id="ship-tools-total-sp" class="ship-tools-total-sp">Total SP : 0</span>
+          </div>
+          <div class="table-wrap">
+            <table id="ship-tools-table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th class="num">SP</th>
+                  <th class="num">Quantité</th>
+                  <th class="num">Total SP</th>
+                </tr>
+              </thead>
+              <tbody id="ship-tools-tbody">
+                <tr><td colspan="4" class="loading-row">Chargement…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <button id="ship-validate-qty-btn" class="tree-open-btn">Valider les produits et quantités.</button>
+      </div>
+
+      <!-- ---- Colonne droite : selection definitive + arbre ---- -->
+      <div class="multi-col multi-col-right">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Statistiques</h3>
+          </div>
+          <div class="table-wrap">
+            <table id="ship-stats-table">
+              <tbody id="ship-stats-tbody">
+                <tr><td>Total SP :</td><td class="num" id="ship-stat-sp">0</td></tr>
+                <tr><td>Capacité Soute Solide :</td><td class="num" id="ship-stat-solide">0 su</td></tr>
+                <tr><td>Capacité Soute Liquide :</td><td class="num" id="ship-stat-liquide">0 L</td></tr>
+                <tr><td>Capacité Mag-plasma :</td><td class="num" id="ship-stat-magplasma">0 L</td></tr>
+                <tr><td>Production Électricité :</td><td class="num" id="ship-stat-electricite">0 MA</td></tr>
+                <tr><td>Stockage énergétique :</td><td class="num" id="ship-stat-energie">0 MAs</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Sélection Définitive :</h3>
+            <span id="ship-selected-total-sp" class="ship-tools-total-sp">Total SP : 0</span>
+          </div>
+          <div class="table-wrap">
+            <table id="ship-selected-table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th class="num">SP</th>
+                  <th class="num">Quantité</th>
+                  <th class="num">Total SP</th>
+                </tr>
+              </thead>
+              <tbody id="ship-selected-list">
+                <tr><td colspan="4" class="empty-row">Aucun produit sélectionné</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <button id="ship-tree-btn" class="tree-open-btn" disabled>Valider la Sélection définitive et afficher l'arbre de fabrication complet ↦</button>
+        <button id="ship-fuselage-btn" class="tree-open-btn" disabled>Valider la Sélection définitive et passer au calcul des pièces de fuselage ↦</button>
+        <button id="ship-reset-selection-btn" class="tree-open-btn">Réinitialiser la sélection définitive</button>
+        <button id="ship-save-config-btn" class="tree-open-btn">Sauvegarde de la configuration</button>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Configurations Sauvegardées</h3>
+          </div>
+          <div class="table-wrap">
+            <table id="ship-saved-configs-table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Date</th>
+                  <th class="num">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ship-saved-configs-tbody">
+                <tr><td colspan="3" class="empty-row">Aucune configuration sauvegardée</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==== ONGLET SAISIE MANUELLE (duree de fabrication) ==== -->
+  <main id="tab-sm" class="tab-panel">
+    <div class="multi-layout">
+
+      <!-- ---- Colonne gauche : recherche par categorie (batiment de base uniquement) ---- -->
+      <div class="multi-col multi-col-left">
+        <div class="toolbar">
+          <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="sm-search-input" placeholder="Rechercher un produit…" autocomplete="off">
+          </div>
+          <select id="sm-category-filter">
+            <option value="">Choisir une catégorie</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table id="sm-products-table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th class="num">Durée</th>
+              </tr>
+            </thead>
+            <tbody id="sm-products-tbody">
+              <tr><td colspan="2" class="empty-row">Choisissez une catégorie pour afficher les produits</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button id="sm-validate-qty-btn" class="tree-open-btn">Valider les produits et durées.</button>
+      </div>
+
+      <!-- ---- Colonne droite : selection definitive + validation en BDD ---- -->
+      <div class="multi-col multi-col-right">
+        <div class="table-wrap">
+          <table id="sm-selected-table">
+            <thead>
+              <tr><th colspan="2">Sélection Définitive :</th></tr>
+            </thead>
+            <tbody id="sm-selected-list">
+              <tr><td colspan="2" class="empty-row">Aucun produit sélectionné</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button id="sm-validate-definitive-btn" class="tree-open-btn" disabled>Validation définitive ↦</button>
+        <button id="sm-reset-selection-btn" class="tree-open-btn">Réinitialiser la sélection définitive</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==== ONGLET STATISTIQUES ==== -->
+  <main id="tab-stats" class="tab-panel">
+    <div class="stat-cards" id="stat-cards">
+      <div class="stat-card">
+        <span class="stat-label">Produits</span>
+        <span class="stat-value" id="stat-total-products">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Recettes</span>
+        <span class="stat-value" id="stat-total-recipes">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Prix moyen</span>
+        <span class="stat-value" id="stat-avg-price">—</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Valeur totale du catalogue</span>
+        <span class="stat-value" id="stat-total-value">—</span>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>Objets par catégorie</h3>
+        <table id="category-table">
+          <thead><tr><th>Nom</th><th class="num">Quantité</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="chart-card">
+        <h3>Produits sans prix</h3>
+        <table id="no-price-table">
+          <thead><tr><th>Nom</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <button id="open-price-update-btn" class="tree-open-btn">Maj manuelle des prix ↦</button>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <h3>Objets les plus chers</h3>
+      <table id="expensive-table">
+        <thead><tr><th>Nom</th><th class="num">Prix</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
+
+</div>
+
+<!-- ==== PANNEAU DE DETAIL (glisse depuis la droite) ==== -->
+<div id="detail-overlay" class="detail-overlay">
+  <aside id="detail-panel" class="detail-panel">
+    <button id="detail-close" class="detail-close">✕</button>
+    <div id="detail-content" class="detail-content"></div>
+  </aside>
+</div>
+
+<!-- ==== PANNEAU ARBRE DE FABRICATION (large, centre) ==== -->
+<div id="tree-overlay" class="detail-overlay">
+  <aside id="tree-panel" class="tree-panel">
+    <button id="tree-close" class="detail-close">✕</button>
+    <div class="tree-header">
+      <div>
+        <div class="detail-breadcrumb">Arbre de fabrication complet</div>
+        <h2 id="tree-title">—</h2>
+      </div>
+      <div class="tree-qty-control">
+        <label for="tree-qty-input">Quantité à fabriquer</label>
+        <input type="number" id="tree-qty-input" min="1" step="1" value="1">
+      </div>
+    </div>
+
+    <div class="tree-body">
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Ressources brutes nécessaires</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Ressource</th><th class="num">Qté</th></tr></thead>
+          <tbody id="tree-raw-tbody"></tbody>
+        </table>
+      </div>
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Lingots nécessaires</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Lingot</th><th class="num">Qté</th></tr></thead>
+          <tbody id="tree-lingots-tbody"></tbody>
+        </table>
+      </div>
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Composants de la recette finale</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Composant</th><th class="num">Qté</th><th class="num">Coût</th></tr></thead>
+          <tbody id="tree-recipe-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="2">Coût total estimé</td><td class="num" id="tree-recipe-total-cost">—</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="tree-flow-section">
+      <div class="tree-col-title">Chaîne de fabrication (ressources → produit final)</div>
+      <div id="tree-flow" class="tree-flow"></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ==== PANNEAU ARBRE DE FABRICATION MULTI (plein ecran, glisse depuis la droite) ==== -->
+<div id="multi-tree-overlay" class="detail-overlay">
+  <aside id="multi-tree-panel" class="tree-panel tree-panel-full">
+    <button id="multi-tree-close" class="detail-close">✕</button>
+    <div class="tree-header">
+      <div>
+        <div class="detail-breadcrumb">Arbre de fabrication complet</div>
+        <h2>Sélection Multi</h2>
+      </div>
+    </div>
+
+    <div class="tree-body">
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Ressources brutes nécessaires</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Ressource</th><th class="num">Qté</th></tr></thead>
+          <tbody id="multi-raw-tbody"></tbody>
+        </table>
+      </div>
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Lingots nécessaires</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Lingot</th><th class="num">Qté</th></tr></thead>
+          <tbody id="multi-lingots-tbody"></tbody>
+        </table>
+      </div>
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Composants de la recette finale</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Composant</th><th class="num">Qté</th><th class="num">Coût</th></tr></thead>
+          <tbody id="multi-recipe-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="2">Coût total estimé</td><td class="num" id="multi-recipe-total-cost">—</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="tree-flow-section">
+      <div class="tree-col-title">Chaîne de fabrication (ressources → produit final)</div>
+      <div id="multi-tree-flow" class="tree-flow"></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ==== PANNEAU ARBRE DE FABRICATION SHIP (plein ecran, glisse depuis la droite) ==== -->
+<div id="ship-tree-overlay" class="detail-overlay">
+  <aside id="ship-tree-panel" class="tree-panel tree-panel-full">
+    <button id="ship-tree-close" class="detail-close">✕</button>
+    <div class="tree-header">
+      <div>
+        <div class="detail-breadcrumb">Arbre de fabrication complet</div>
+        <h2>Sélection Ship</h2>
+      </div>
+    </div>
+
+    <div class="tree-body">
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Ressources brutes nécessaires</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Ressource</th><th class="num">Qté</th></tr></thead>
+          <tbody id="ship-raw-tbody"></tbody>
+        </table>
+      </div>
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Lingots nécessaires</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Lingot</th><th class="num">Qté</th></tr></thead>
+          <tbody id="ship-lingots-tbody"></tbody>
+        </table>
+      </div>
+      <div class="tree-col tree-col-half">
+        <div class="tree-col-title">Composants de la recette finale</div>
+        <table class="tree-raw-table">
+          <thead><tr><th>Composant</th><th class="num">Qté</th><th class="num">Coût</th></tr></thead>
+          <tbody id="ship-recipe-tbody"></tbody>
+          <tfoot>
+            <tr><td colspan="2">Coût total estimé</td><td class="num" id="ship-recipe-total-cost">—</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="tree-flow-section">
+      <div class="tree-col-title">Chaîne de fabrication (ressources → produit final)</div>
+      <div id="ship-tree-flow" class="tree-flow"></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ==== PANNEAU CALCUL DES PIECES DE FUSELAGE (plein ecran, glisse depuis la droite) ==== -->
+<div id="ship-fuselage-overlay" class="detail-overlay">
+  <aside id="ship-fuselage-panel" class="tree-panel tree-panel-full">
+    <button id="ship-fuselage-close" class="detail-close">✕</button>
+    <div class="tree-header">
+      <div>
+        <div class="detail-breadcrumb">Étape suivante</div>
+        <h2>Calcul des pièces de fuselage</h2>
+      </div>
+    </div>
+
+    <div class="tree-body">
+      <div class="tree-col tree-col-half">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Choix des pièces de fuselage</h3>
+          </div>
+          <div class="table-wrap">
+            <table id="ship-fuselage-parts-table">
+              <colgroup>
+                <col style="width:24%">
+                <col style="width:8%">
+                <col style="width:9%">
+                <col style="width:8%">
+                <col style="width:9%">
+                <col style="width:11%">
+                <col style="width:15%">
+                <col style="width:9%">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th class="num">SP</th>
+                  <th class="num">Chassis</th>
+                  <th class="num">Poids</th>
+                  <th class="num">Fuselage</th>
+                  <th class="num">Cap thermique</th>
+                  <th class="num">Quantité</th>
+                  <th class="num">Exclu</th>
+                </tr>
+              </thead>
+              <tbody id="ship-fuselage-parts-tbody">
+                <tr><td colspan="8" class="loading-row">Chargement…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="tree-col tree-col-half">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Statistiques</h3>
+          </div>
+          <div class="table-wrap">
+            <table id="ship-fuselage-stats-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th class="num">Choix</th>
+                  <th class="num">Proposition</th>
+                </tr>
+              </thead>
+              <tbody id="ship-fuselage-stats-tbody">
+                <tr><td>SP Requis :</td><td class="num" id="ship-fuselage-stat-sp">0</td><td class="num">—</td></tr>
+                <tr><td>SP total :</td><td class="num" id="ship-fuselage-stat-sp-total">0</td><td class="num" id="ship-fuselage-stat-sp-total-proposal">0</td></tr>
+                <tr><td>Intégrité % :</td><td class="num" id="ship-fuselage-stat-integrite">0</td><td class="num" id="ship-fuselage-stat-integrite-proposal">0</td></tr>
+                <tr><td>Poids total :</td><td class="num" id="ship-fuselage-stat-poids-total">0</td><td class="num" id="ship-fuselage-stat-poids-total-proposal">0</td></tr>
+                <tr><td>Frame total :</td><td class="num" id="ship-fuselage-stat-frame-total">0</td><td class="num" id="ship-fuselage-stat-frame-total-proposal">0</td></tr>
+                <tr><td>Fuselage total :</td><td class="num" id="ship-fuselage-stat-fuselage-total">0</td><td class="num" id="ship-fuselage-stat-fuselage-total-proposal">0</td></tr>
+                <tr><td>Cap therm total :</td><td class="num" id="ship-fuselage-stat-capterm-total">0</td><td class="num" id="ship-fuselage-stat-capterm-total-proposal">0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Proposition</h3>
+          </div>
+          <div class="proposal-objectives">
+            <label class="proposal-qty-label" for="ship-fuselage-integrity-target-input">
+              Objectif Intégrité (%) :
+              <input type="number" class="proposal-qty-input" id="ship-fuselage-integrity-target-input" min="0" step="1" value="100">
+            </label>
+            <label class="proposal-qty-label" for="ship-fuselage-captherm-target-input">
+              Objectif Cap Thermique Total :
+              <input type="number" class="proposal-qty-input" id="ship-fuselage-captherm-target-input" min="0" step="0.01" value="2000">
+            </label>
+          </div>
+          <div class="proposal-size-caps">
+            <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x6x2">
+              8x6x2 :
+              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x6x2" min="0" step="1" value="0">
+            </label>
+            <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x3x2">
+              8x3x2 :
+              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x2" min="0" step="1" value="0">
+            </label>
+            <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x3x1">
+              8x3x1 :
+              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x1" min="0" step="1" value="0">
+            </label>
+            <label class="proposal-qty-label" for="ship-fuselage-maxqty-6x3x2">
+              6x3x2 :
+              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-6x3x2" min="0" step="1" value="0">
+            </label>
+            <label class="proposal-qty-label" for="ship-fuselage-maxqty-6x3x1">
+              6x3x1 :
+              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-6x3x1" min="0" step="1" value="0">
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table id="ship-fuselage-proposal-table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th class="num">Quantité</th>
+                </tr>
+              </thead>
+              <tbody id="ship-fuselage-proposal-tbody">
+                <tr><td colspan="2" class="empty-row">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p id="ship-fuselage-proposal-note" class="proposal-note"></p>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ==== VOLET FLOTTANT AU SURVOL D'UN ARTICLE (Ship) ==== -->
+<aside id="ship-hover-panel" class="hover-panel">
+  <div id="ship-hover-content" class="hover-panel-content"></div>
+</aside>
+
+<!-- ==== INFO-BULLE SURVOL D'UN PAVE DE CHAINE DE FABRICATION ==== -->
+<div id="flow-recipe-tooltip" class="flow-recipe-tooltip">
+  <div id="flow-recipe-tooltip-content"></div>
+</div>
+
+<!-- ==== PANNEAU MISE A JOUR MANUELLE DES PRIX (plein ecran, glisse depuis la droite) ==== -->
+<div id="price-update-overlay" class="detail-overlay">
+  <aside id="price-update-panel" class="tree-panel tree-panel-full">
+    <button id="price-update-close" class="detail-close">✕</button>
+    <div class="tree-header">
+      <div>
+        <div class="detail-breadcrumb">Produits sans prix</div>
+        <h2>Mise à Jour Manuelle</h2>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table id="price-update-table">
+        <thead>
+          <tr><th>Nom</th><th class="num">Prix</th><th class="num">Sans Prix</th></tr>
+        </thead>
+        <tbody id="price-update-tbody">
+          <tr><td colspan="3" class="empty-row">Aucun produit sans prix</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button id="price-update-validate-btn" class="tree-open-btn">Validation des modifications</button>
+  </aside>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

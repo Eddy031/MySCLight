@@ -1,0 +1,1037 @@
+/* ==========================================================
+   Design tokens
+   ========================================================== */
+:root {
+  --bg:        #0c1118;
+  --surface:   #131a24;
+  --surface-2: #1a2330;
+  --surface-3: #212c3b;
+  --border:    #263141;
+  --border-hi: #364357;
+
+  --text:      #e6ebf2;
+  --text-dim:  #93a1b5;
+  --text-mute: #5c6b80;
+
+  --amber:     #f2a623;
+  --amber-dim: #8a6420;
+  --teal:      #1fbf8f;
+  --teal-dim:  #146349;
+  --coral:     #e2603f;
+  --blue:      #4d9dff;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-attachment: fixed;
+  background-position: -1px -1px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+}
+
+.app { max-width: 1180px; margin: 0 auto; padding: 28px 24px 60px; }
+
+/* ==========================================================
+   En-tete
+   ========================================================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+.brand-mark {
+  font-size: 28px;
+  color: var(--amber);
+  line-height: 1;
+}
+
+.brand-text h1 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0;
+  color: var(--text);
+}
+
+.brand-sub {
+  font-size: 12px;
+  color: var(--text-mute);
+  letter-spacing: 0.02em;
+}
+
+.tabs { display: flex; gap: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; }
+
+.tab-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { background: var(--amber); color: #1a1305; font-weight: 500; }
+
+/* ==========================================================
+   Panneaux d'onglet
+   ========================================================== */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadein 0.2s ease; }
+
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+/* ==========================================================
+   Barre d'outils / recherche
+   ========================================================== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-mute);
+  font-size: 14px;
+}
+
+#search-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 10px 12px 10px 32px;
+  outline: none;
+}
+
+#search-input:focus { border-color: var(--amber-dim); }
+
+#category-filter {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 10px 12px;
+  outline: none;
+  min-width: 200px;
+}
+
+.result-count {
+  font-size: 12px;
+  color: var(--text-mute);
+  white-space: nowrap;
+}
+
+/* ==========================================================
+   Tableau
+   ========================================================== */
+.table-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+table { width: 100%; border-collapse: collapse; }
+
+#ship-fuselage-parts-table { table-layout: fixed; }
+#ship-fuselage-parts-table td, #ship-fuselage-parts-table th { overflow: hidden; text-overflow: ellipsis; }
+
+.fuselage-exclu-select {
+  width: 100%;
+  max-width: 56px;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border-hi);
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  text-align: center;
+}
+.fuselage-exclu-select:focus { outline: 1px solid var(--amber); }
+
+
+thead tr { background: var(--surface-2); }
+
+th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-mute);
+  padding: 12px 16px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+th.sortable { cursor: pointer; user-select: none; }
+th.sortable:hover { color: var(--text-dim); }
+th.num { text-align: right; }
+
+.sort-arrow { display: inline-block; width: 10px; font-size: 10px; color: var(--amber); }
+
+td {
+  padding: 12px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); }
+
+tbody tr { cursor: pointer; transition: background 0.1s; }
+tbody tr:hover { background: var(--surface-2); }
+tbody tr:last-child td { border-bottom: none; }
+
+td.name-cell { color: var(--text); font-weight: 500; }
+
+.cat-pill {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: var(--surface-3);
+  color: var(--text-dim);
+  border: 1px solid var(--border-hi);
+}
+
+.loading-row, .empty-row {
+  text-align: center;
+  color: var(--text-mute);
+  padding: 32px !important;
+}
+
+.proposal-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.proposal-note.warning {
+  color: var(--coral);
+}
+
+/* ==========================================================
+   Cartes de statistiques
+   ========================================================== */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-mute);
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.chart-card, .table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+
+.chart-card h3, .table-card h3 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 16px;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.table-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 16px;
+}
+
+.table-card-header h3 { margin: 0; }
+
+.ship-tools-total-sp {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--amber);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.chart-card canvas { max-height: 260px; }
+
+#expensive-table th, #expensive-table td,
+#category-table th, #category-table td,
+#no-price-table th, #no-price-table td,
+#price-update-table th, #price-update-table td { padding: 8px 12px; }
+
+#no-price-table + .tree-open-btn { margin-top: 14px; margin-bottom: 0; }
+
+#price-update-panel .table-wrap { margin-bottom: 20px; max-height: 65vh; overflow-y: auto; }
+
+.no-price-btn {
+  background: var(--surface-3);
+  border: 1px solid var(--border-hi);
+  color: var(--text-mute);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.no-price-btn:hover { border-color: var(--amber-dim); }
+.no-price-btn.active {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--surface);
+}
+
+.price-input:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ==========================================================
+   Panneau de detail
+   ========================================================== */
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 12, 0.6);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 50;
+}
+
+.detail-overlay.open { opacity: 1; pointer-events: auto; }
+
+.detail-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(440px, 92vw);
+  background: var(--surface);
+  border-left: 1px solid var(--border-hi);
+  padding: 28px 24px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+.detail-overlay.open .detail-panel { transform: translateX(0); }
+
+.detail-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.detail-close:hover { color: var(--text); border-color: var(--border-hi); }
+
+.detail-content h2 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  margin: 0 24px 4px 0;
+  color: var(--text);
+}
+
+.detail-breadcrumb {
+  font-size: 11px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+}
+
+.detail-meta {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-meta-item { display: flex; flex-direction: column; gap: 2px; }
+.detail-meta-item .label { font-size: 10px; color: var(--text-mute); text-transform: uppercase; }
+.detail-meta-item .val { font-size: 16px; color: var(--amber); font-weight: 500; }
+
+.detail-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-dim);
+  margin-bottom: 22px;
+}
+
+.detail-section-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-mute);
+  margin: 0 0 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.spec-row, .ingredient-row, .usage-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 6px 0;
+  color: var(--text-dim);
+}
+
+.spec-row .k { color: var(--text-mute); }
+.spec-row .v { color: var(--text); }
+
+.recipe-choice-hint {
+  font-size: 11px;
+  color: var(--text-mute);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.recipe-block-active {
+  border-color: var(--amber-dim);
+  background: linear-gradient(180deg, rgba(242, 166, 35, 0.06), transparent 40%), var(--surface-2);
+}
+
+.recipe-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.recipe-radio input[type="radio"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-hi);
+  border-radius: 50%;
+  background: var(--surface);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.recipe-radio input[type="radio"]:checked {
+  border-color: var(--amber);
+}
+
+.recipe-radio input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+
+.recipe-block {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.recipe-block-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.station-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border: 1px solid var(--teal-dim);
+}
+
+.plan-badge {
+  font-size: 10px;
+  color: var(--text-mute);
+}
+
+.ingredient-row .name { color: var(--text); cursor: pointer; }
+.ingredient-row .name:hover { color: var(--amber); }
+.ingredient-row .qty { font-variant-numeric: tabular-nums; }
+
+.usage-row .name { cursor: pointer; color: var(--text); }
+.usage-row .name:hover { color: var(--amber); }
+
+/* ==========================================================
+   Bouton "voir l'arbre de fabrication"
+   ========================================================== */
+.tree-open-btn {
+  display: block;
+  width: 100%;
+  background: var(--surface-3);
+  border: 1px solid var(--border-hi);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-bottom: 14px;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.tree-open-btn:hover { border-color: var(--amber-dim); background: var(--surface-2); }
+.tree-open-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tree-open-btn:disabled:hover { border-color: var(--border-hi); background: var(--surface-3); }
+
+/* ==========================================================
+   Onglet Multi
+   ========================================================== */
+.multi-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.multi-col-left #multi-products-table tbody tr,
+.multi-col-right #multi-selected-table tbody tr { cursor: default; }
+.multi-col-left #multi-products-table tbody tr:hover,
+.multi-col-right #multi-selected-table tbody tr:hover { background: none; }
+
+.multi-col-right .table-wrap { margin-bottom: 16px; }
+#multi-selected-table td.num { color: var(--amber); }
+
+/* Tableau "Configurations Base Sauvegardées" (onglet Multi) */
+#tab-multi .multi-col-right .table-card { margin-top: 4px; }
+#multi-saved-configs-table tbody tr { cursor: default; }
+#multi-saved-configs-table tbody tr:hover { background: none; }
+#multi-saved-configs-table .saved-config-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.multi-qty-input {
+  width: 80px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 6px 8px;
+  outline: none;
+}
+.multi-qty-input:focus { border-color: var(--amber-dim); }
+
+/* ==========================================================
+   Onglet Ship
+   ========================================================== */
+/* Colonne "Choix des outils" elargie de 10% au detriment de la colonne de droite */
+#tab-ship .multi-layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); }
+
+#ship-tools-table tbody tr { cursor: default; }
+#ship-tools-table tbody tr:hover { background: none; }
+#ship-selected-table tbody tr { cursor: default; }
+#ship-selected-table tbody tr:hover { background: none; }
+#tab-ship .multi-col-right .table-wrap { margin-bottom: 16px; }
+#ship-selected-table td.num { color: var(--amber); }
+#tab-ship .multi-col-right .table-card + .table-card { margin-top: 20px; }
+#tab-ship .multi-col-right #ship-tree-btn { margin-top: 20px; }
+#tab-ship .multi-col-right #ship-save-config-btn { margin-top: -6px; }
+
+/* Tableau "Configurations Sauvegardées" */
+#ship-saved-configs-table tbody tr { cursor: default; }
+#ship-saved-configs-table tbody tr:hover { background: none; }
+#ship-saved-configs-table .saved-config-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.ship-config-btn {
+  background: var(--surface-3);
+  border: 1px solid var(--border-hi);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.ship-config-btn:hover { border-color: var(--amber-dim); background: var(--surface-2); }
+.ship-config-btn.ship-config-delete-btn { color: var(--text-mute); }
+.ship-config-btn.ship-config-delete-btn:hover { color: var(--amber); }
+
+/* Tableau "Proposition" (calcul des pieces de fuselage) : objectifs
+   d'integrite et de Cap Thermique Total pris en compte dans le calcul */
+.proposal-objectives {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 12px 16px 0;
+}
+
+/* Tableau "Proposition" (calcul des pieces de fuselage) : plafonds de
+   quantite par taille de piece, pris en compte dans le calcul */
+.proposal-size-caps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 0 16px 12px;
+}
+.proposal-qty-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-mute);
+  white-space: nowrap;
+}
+.proposal-qty-input {
+  width: 64px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 4px 6px;
+  outline: none;
+}
+.proposal-qty-input:focus { border-color: var(--amber-dim); }
+
+/* ==========================================================
+   Volet flottant au survol d'un article (Ship)
+   ========================================================== */
+.hover-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(440px, 92vw);
+  background: var(--surface);
+  border-left: 1px solid var(--border-hi);
+  padding: 24px 22px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.2s ease;
+  z-index: 60;
+  pointer-events: none;
+  box-shadow: -8px 0 24px rgba(4, 7, 12, 0.35);
+}
+
+.hover-panel.open { transform: translateX(0); }
+
+.hover-panel-content h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  margin: 0 0 14px;
+  color: var(--text);
+}
+
+.hover-panel-img {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+/* ==========================================================
+   Panneau arbre de fabrication (large, centre)
+   ========================================================== */
+.tree-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: min(1196px, 96vw);
+  background: var(--surface);
+  border-left: 1px solid var(--border-hi);
+  padding: 28px 28px 40px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+.detail-overlay.open .tree-panel { transform: translateX(0); }
+
+.tree-panel-full { width: 100%; border-left: none; }
+
+.tree-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tree-header h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  margin: 2px 0 0;
+  color: var(--text);
+}
+
+.tree-qty-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tree-qty-control label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-mute);
+}
+
+#tree-qty-input {
+  width: 110px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 8px 10px;
+  outline: none;
+}
+#tree-qty-input:focus { border-color: var(--amber-dim); }
+
+.tree-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+#tree-panel .tree-body,
+#multi-tree-panel .tree-body,
+#ship-tree-panel .tree-body {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.tree-col-half {
+  min-width: 0;
+}
+
+.tree-col-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-mute);
+  margin-bottom: 12px;
+}
+
+.tree-structure {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.tree-node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0 5px 10px;
+  border-left: 1px solid var(--border-hi);
+  font-size: 13px;
+  cursor: default;
+}
+
+.tree-qty {
+  color: var(--text-mute);
+  font-variant-numeric: tabular-nums;
+  min-width: 44px;
+}
+
+.tree-name { color: var(--text); transition: color 0.1s; cursor: pointer; }
+.tree-name:hover { color: var(--amber); }
+.tree-name-raw { color: var(--teal); cursor: default; }
+.tree-name-raw:hover { color: var(--teal); }
+
+.tree-tag {
+  font-size: 10px;
+  color: var(--text-mute);
+  border: 1px solid var(--border-hi);
+  border-radius: 100px;
+  padding: 1px 8px;
+}
+.tree-tag-warn { color: var(--coral); border-color: var(--coral); }
+.tree-tag-final { color: var(--amber); border-color: var(--amber-dim); }
+
+.tree-alt-link {
+  font-size: 10px;
+  color: var(--amber);
+  cursor: pointer;
+  border-bottom: 1px dotted var(--amber-dim);
+}
+.tree-alt-link:hover { color: #ffc966; }
+
+.station-badge.small { font-size: 10px; padding: 1px 6px; }
+
+.tree-raw-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tree-raw-table th {
+  font-size: 10px;
+  padding: 10px 12px;
+  background: var(--surface-3);
+}
+
+.tree-raw-table td {
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.tree-raw-table tfoot td {
+  border-top: 1px solid var(--border-hi);
+  border-bottom: none;
+  font-weight: 500;
+  color: var(--amber);
+  padding-top: 12px;
+}
+
+/* ==========================================================
+   Vue horizontale de la chaine de fabrication
+   ========================================================== */
+.tree-flow-section {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+
+.tree-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.flow-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 138px;
+  max-width: 168px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: center;
+}
+
+.flow-qty-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.flow-qty {
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.flow-duration {
+  color: var(--amber);
+  font-size: 11px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.flow-name {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.flow-graph-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.flow-graph-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.flow-graph-cols {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 90px;
+}
+
+.flow-graph-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+/* Tous les encadres de la chaine "graphe" (onglet Multi) partagent la
+   meme taille, calee sur les plus grands (nom de produit sur 2 lignes). */
+.flow-graph-col .flow-box {
+  width: 168px;
+  height: 100px;
+  justify-content: center;
+}
+
+.flow-link {
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ==========================================================
+   Info-bulle au survol d'un pave de chaine de fabrication
+   (arbre produit, onglet Multi, onglet Ship). Reprend les memes
+   classes que le detail d'une recette (recipe-block-head,
+   station-badge, plan-badge, ingredient-row) pour un rendu identique.
+   ========================================================== */
+.flow-recipe-tooltip {
+  position: fixed;
+  z-index: 200;
+  min-width: 220px;
+  max-width: 300px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: 0 10px 28px rgba(4, 7, 12, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.flow-recipe-tooltip.open { opacity: 1; transform: translateY(0); }
+
+.flow-recipe-tooltip-empty {
+  font-size: 12px;
+  color: var(--text-mute);
+}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+@media (max-width: 780px) {
+  .stat-cards { grid-template-columns: repeat(2, 1fr); }
+  .charts-grid { grid-template-columns: 1fr; }
+  th:nth-child(2), td:nth-child(2) { display: none; }
+  .tree-body { grid-template-columns: 1fr; }
+  .multi-layout { grid-template-columns: 1fr; }
+  #multi-products-table th:nth-child(2), #multi-products-table td:nth-child(2) { display: table-cell; }
+}
