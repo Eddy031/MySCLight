@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inventaire — Encyclopédie</title>
+<title>My Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css?v=20260926e">
@@ -17,7 +17,7 @@
     <div class="brand">
       <span class="brand-mark">◈</span>
       <div class="brand-text">
-        <h1>MyProd</h1>
+        <h1>My Tools</h1>
         <span class="brand-sub">By Xfury</span>
       </div>
     </div>
@@ -596,12 +596,12 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th class="num">Choix</th>
-                  <th class="num">Proposition</th>
+                  <th class="num">Choix Manuel</th>
+                  <th class="num">Proposition IA</th>
                 </tr>
               </thead>
               <tbody id="ship-fuselage-stats-tbody">
-                <tr><td>SP Requis :</td><td class="num" id="ship-fuselage-stat-sp">0</td><td class="num">—</td></tr>
+                <tr><td>SP Requis : (séléction Definitive précedente)</td><td class="num" id="ship-fuselage-stat-sp">0</td><td class="num">—</td></tr>
                 <tr><td>SP total :</td><td class="num" id="ship-fuselage-stat-sp-total">0</td><td class="num" id="ship-fuselage-stat-sp-total-proposal">0</td></tr>
                 <tr><td>Intégrité % :</td><td class="num" id="ship-fuselage-stat-integrite">0</td><td class="num" id="ship-fuselage-stat-integrite-proposal">0</td></tr>
                 <tr><td>Poids total :</td><td class="num" id="ship-fuselage-stat-poids-total">0</td><td class="num" id="ship-fuselage-stat-poids-total-proposal">0</td></tr>
@@ -655,11 +655,11 @@
               </label>
               <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x3x2">
                 8x3x2 :
-                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x2" min="0" step="1" value="2">
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x2" min="0" step="1" value="0">
               </label>
               <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x6x2">
                 8x6x2 :
-                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x6x2" min="0" step="1" value="0">
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x6x2" min="0" step="1" value="2">
               </label>
             </div>
             <div class="proposal-size-caps-row">
@@ -677,8 +677,8 @@
             <table id="ship-fuselage-proposal-table">
               <thead>
                 <tr>
-                  <th>Nom</th>
-                  <th class="num">Quantité</th>
+                  <th>PIECES</th>
+                  <th class="num">QUANTITE</th>
                 </tr>
               </thead>
               <tbody id="ship-fuselage-proposal-tbody">
