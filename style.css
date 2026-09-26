@@ -663,9 +663,18 @@ td.name-cell { color: var(--text); font-weight: 500; }
    quantite par taille de piece, pris en compte dans le calcul */
 .proposal-size-caps {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 16px 12px;
+}
+.proposal-size-caps-row {
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
   gap: 10px 16px;
-  padding: 0 16px 12px;
+}
+.proposal-size-caps-row .proposal-qty-label {
+  min-width: 120px;
+  justify-content: space-between;
 }
 .proposal-qty-label {
   display: flex;
@@ -1034,4 +1043,19 @@ td.name-cell { color: var(--text); font-weight: 500; }
   .tree-body { grid-template-columns: 1fr; }
   .multi-layout { grid-template-columns: 1fr; }
   #multi-products-table th:nth-child(2), #multi-products-table td:nth-child(2) { display: table-cell; }
+}
+
+/* Choix d'exclusion par materiau (panneau "Calcul des pieces de fuselage") */
+.fuselage-material-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0 0 16px;
+}
+.fuselage-material-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
 }

@@ -6,7 +6,7 @@
 <title>Inventaire — Encyclopédie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260926e">
 </head>
 <body>
 
@@ -504,6 +504,56 @@
           <div class="table-card-header">
             <h3>Choix des pièces de fuselage</h3>
           </div>
+          <div id="ship-fuselage-material-filters" class="fuselage-material-filters">
+            <label class="fuselage-material-label">Alliage X
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Alliage X" aria-label="Exclure Alliage X">
+                <option value="O" selected>O</option>
+                <option value="N">N</option>
+              </select>
+            </label>
+            <label class="fuselage-material-label">Platinium
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Platinium" aria-label="Exclure Platinium">
+                <option value="O" selected>O</option>
+                <option value="N">N</option>
+              </select>
+            </label>
+            <label class="fuselage-material-label">Acier
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Acier" aria-label="Exclure Acier">
+                <option value="O" selected>O</option>
+                <option value="N">N</option>
+              </select>
+            </label>
+            <label class="fuselage-material-label">Acier Thermique
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Acier thermique" aria-label="Exclure Acier Thermique">
+                <option value="O" selected>O</option>
+                <option value="N">N</option>
+              </select>
+            </label>
+            <label class="fuselage-material-label">Titane
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Titane" aria-label="Exclure Titane">
+                <option value="O" selected>O</option>
+                <option value="N">N</option>
+              </select>
+            </label>
+            <label class="fuselage-material-label">Titane thermique
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Titane thermique" aria-label="Exclure Titane thermique">
+                <option value="O">O</option>
+                <option value="N" selected>N</option>
+              </select>
+            </label>
+            <label class="fuselage-material-label">Levinium
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Levinium" aria-label="Exclure Levinium">
+                <option value="O">O</option>
+                <option value="N" selected>N</option>
+              </select>
+            </label>
+            <label class="fuselage-material-label">Chassis Solide
+              <select class="fuselage-exclu-select fuselage-material-select" data-group="Chassis solide" aria-label="Exclure Chassis Solide">
+                <option value="O">O</option>
+                <option value="N" selected>N</option>
+              </select>
+            </label>
+          </div>
           <div class="table-wrap">
             <table id="ship-fuselage-parts-table">
               <colgroup>
@@ -578,26 +628,50 @@
             </label>
           </div>
           <div class="proposal-size-caps">
-            <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x6x2">
-              8x6x2 :
-              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x6x2" min="0" step="1" value="0">
-            </label>
-            <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x3x2">
-              8x3x2 :
-              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x2" min="0" step="1" value="0">
-            </label>
-            <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x3x1">
-              8x3x1 :
-              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x1" min="0" step="1" value="0">
-            </label>
-            <label class="proposal-qty-label" for="ship-fuselage-maxqty-6x3x2">
-              6x3x2 :
-              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-6x3x2" min="0" step="1" value="0">
-            </label>
-            <label class="proposal-qty-label" for="ship-fuselage-maxqty-6x3x1">
-              6x3x1 :
-              <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-6x3x1" min="0" step="1" value="0">
-            </label>
+            <div class="proposal-size-caps-row">
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-4x3x1">
+                4x3x1 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-4x3x1" min="0" step="1" value="1">
+              </label>
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-4x3x2">
+                4x3x2 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-4x3x2" min="0" step="1" value="1">
+              </label>
+            </div>
+            <div class="proposal-size-caps-row">
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-6x3x1">
+                6x3x1 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-6x3x1" min="0" step="1" value="1">
+              </label>
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-6x3x2">
+                6x3x2 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-6x3x2" min="0" step="1" value="1">
+              </label>
+            </div>
+            <div class="proposal-size-caps-row">
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x3x1">
+                8x3x1 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x1" min="0" step="1" value="0">
+              </label>
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x3x2">
+                8x3x2 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x3x2" min="0" step="1" value="0">
+              </label>
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-8x6x2">
+                8x6x2 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-8x6x2" min="0" step="1" value="0">
+              </label>
+            </div>
+            <div class="proposal-size-caps-row">
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-12x6x2">
+                12x6x2 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-12x6x2" min="0" step="1" value="0">
+              </label>
+              <label class="proposal-qty-label" for="ship-fuselage-maxqty-16x6x2">
+                16x6x2 :
+                <input type="number" class="proposal-qty-input" id="ship-fuselage-maxqty-16x6x2" min="0" step="1" value="0">
+              </label>
+            </div>
           </div>
           <div class="table-wrap">
             <table id="ship-fuselage-proposal-table">
@@ -655,6 +729,6 @@
   </aside>
 </div>
 
-<script src="app.js"></script>
+<script src="app.js?v=20260926e"></script>
 </body>
 </html>

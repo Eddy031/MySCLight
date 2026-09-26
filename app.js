@@ -1866,6 +1866,8 @@ async function openShipFuselagePanel() {
 const SHIP_FUSELAGE_CATEGORY = 'Piece de fuselage';
 // Categorie ajoutee a la fin du tableau (produits de la categorie "Aile")
 const SHIP_FUSELAGE_EXTRA_CATEGORY = 'Aile';
+// Categorie ajoutee apres les produits "Aile" (Deporteurs) : cockpits
+const SHIP_FUSELAGE_COCKPIT_CATEGORY = 'Cockpit';
 
 // Derniere liste de pieces de fuselage chargee (hors categorie "Aile"),
 // reutilisee par le calcul de la Proposition sans refaire d'appels reseau.
@@ -1887,6 +1889,21 @@ const SHIP_FUSELAGE_GROUP_DETECT_ORDER = ['Titane thermique', 'Acier thermique',
 // les reactiver en repassant la case a "N".
 const SHIP_FUSELAGE_DEFAULT_EXCLUDED_GROUPS = ['Alliage X', 'Acier', 'Titane', 'Platinium'];
 
+// Materiaux exclus via les choix O/N places sous le titre "Choix des pieces
+// de fuselage" : les pieces d'un materiau a "O" ne sont pas affichees dans
+// le tableau et n'entrent pas dans le calcul de la Proposition.
+function getShipFuselageExcludedGroups() {
+  const excluded = new Set();
+  document.querySelectorAll('#ship-fuselage-material-filters .fuselage-material-select').forEach(sel => {
+    if (sel.value === 'O') excluded.add(sel.dataset.group);
+  });
+  return excluded;
+}
+
+// Derniere liste complete des pieces chargees (fuselage + Aile), reutilisee
+// pour re-afficher le tableau quand un choix de materiau change.
+let shipFuselageAllParts = [];
+
 function shipFuselageGroupOf(name) {
   const lower = name.toLowerCase();
   for (const g of SHIP_FUSELAGE_GROUP_DETECT_ORDER) {
@@ -1905,7 +1922,7 @@ function shipFuselageSizeOf(name) {
 
 // Tailles pour lesquelles le tableau "Proposition" propose un plafond de
 // quantite (champ "ship-fuselage-maxqty-<taille>").
-const SHIP_FUSELAGE_PROPOSAL_SIZES = ['8x6x2', '8x3x2', '8x3x1', '6x3x2', '6x3x1'];
+const SHIP_FUSELAGE_PROPOSAL_SIZES = ['4x3x1', '4x3x2', '6x3x1', '6x3x2', '8x3x1', '8x3x2', '8x6x2', '12x6x2', '16x6x2'];
 
 async function loadShipFuselageParts() {
   const tbody = document.getElementById('ship-fuselage-parts-tbody');
@@ -1916,6 +1933,7 @@ async function loadShipFuselageParts() {
   const categories = await catRes.json();
   const category = categories.find(c => c.name === SHIP_FUSELAGE_CATEGORY);
   const extraCategory = categories.find(c => c.name === SHIP_FUSELAGE_EXTRA_CATEGORY);
+  const cockpitCategory = categories.find(c => c.name === SHIP_FUSELAGE_COCKPIT_CATEGORY);
 
   if (!category) {
     tbody.innerHTML = `<tr><td colspan="8" class="empty-row">Categorie "${SHIP_FUSELAGE_CATEGORY}" introuvable</td></tr>`;
@@ -1933,7 +1951,14 @@ async function loadShipFuselageParts() {
     extraProducts = await apiFetch(`${API}/products?${extraParams.toString()}`).then(r => r.json());
   }
 
-  if (products.length === 0 && extraProducts.length === 0) {
+  let cockpitProducts = [];
+  if (cockpitCategory) {
+    const cockpitParams = new URLSearchParams();
+    cockpitParams.set('category_id', cockpitCategory.id);
+    cockpitProducts = await apiFetch(`${API}/products?${cockpitParams.toString()}`).then(r => r.json());
+  }
+
+  if (products.length === 0 && extraProducts.length === 0 && cockpitProducts.length === 0) {
     tbody.innerHTML = `<tr><td colspan="8" class="empty-row">Aucun résultat</td></tr>`;
     return;
   }
@@ -1962,6 +1987,7 @@ async function loadShipFuselageParts() {
   }));
 
   await Promise.all(extraProducts.map(p => loadShipFuselagePartSpecs(p)));
+  await Promise.all(cockpitProducts.map(p => loadShipFuselagePartSpecs(p)));
 
   products.sort((a, b) => {
     const ga = SHIP_FUSELAGE_GROUP_ORDER.indexOf(a.group);
@@ -1971,6 +1997,7 @@ async function loadShipFuselageParts() {
   });
 
   extraProducts.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+  cockpitProducts.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
 
   shipFuselageLastCandidates = products.map(p => ({
     id: p.id,
@@ -1984,10 +2011,37 @@ async function loadShipFuselageParts() {
     capTherm: p.capThermique || 0
   }));
 
-  const allFuselageParts = products.concat(extraProducts);
+  shipFuselageAllParts = products.concat(extraProducts, cockpitProducts);
+  renderShipFuselagePartsRows();
+}
 
-  tbody.innerHTML = allFuselageParts.map(p => {
-    const defaultExclu = SHIP_FUSELAGE_DEFAULT_EXCLUDED_GROUPS.includes(p.group) ? 'O' : 'N';
+// Affiche les lignes du tableau "Choix des pieces de fuselage" en masquant
+// les materiaux a "O" ; conserve les quantites et choix "Exclu" deja saisis.
+function renderShipFuselagePartsRows() {
+  const tbody = document.getElementById('ship-fuselage-parts-tbody');
+  if (!tbody) return;
+
+  const prevQty = new Map();
+  const prevExclu = new Map();
+  tbody.querySelectorAll('tr[data-id]').forEach(tr => {
+    const inp = tr.querySelector('.multi-qty-input');
+    if (inp) prevQty.set(String(tr.dataset.id), inp.value);
+    const sel = tr.querySelector('.fuselage-exclu-select');
+    if (sel) prevExclu.set(String(tr.dataset.id), sel.value);
+  });
+
+  const excludedGroups = getShipFuselageExcludedGroups();
+  const visibleParts = shipFuselageAllParts.filter(p => !p.group || !excludedGroups.has(p.group));
+
+  if (visibleParts.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="empty-row">Aucun résultat</td></tr>`;
+    updateShipFuselageStats();
+    return;
+  }
+
+
+  tbody.innerHTML = visibleParts.map(p => {
+    const defaultExclu = prevExclu.get(String(p.id)) || 'N';
     return `
     <tr data-id="${p.id}" data-sp="${p.sp}" data-chassis="${p.chassis}" data-weight="${p.weight || 0}" data-fuselage="${p.fuselage}" data-capterm="${p.capThermique}" data-exclu="${defaultExclu}">
       <td class="name-cell">${escapeHtml(p.name)}</td>
@@ -1996,7 +2050,7 @@ async function loadShipFuselageParts() {
       <td class="num">${formatFuselageWeight(p.weight)}</td>
       <td class="num">${formatQty(p.fuselage)}</td>
       <td class="num">${formatQty(p.capThermique)}</td>
-      <td class="num"><input type="number" min="0" step="1" class="multi-qty-input" value="0" data-id="${p.id}" data-name="${escapeHtml(p.name)}" aria-label="Quantité"></td>
+      <td class="num"><input type="number" min="0" step="1" class="multi-qty-input" value="${prevQty.get(String(p.id)) || 0}" data-id="${p.id}" data-name="${escapeHtml(p.name)}" aria-label="Quantité"></td>
       <td class="num">
         <select class="fuselage-exclu-select" data-id="${p.id}" aria-label="Exclure cette piece du calcul d'optimisation">
           <option value="N" ${defaultExclu === 'N' ? 'selected' : ''}>N</option>
@@ -2011,6 +2065,14 @@ async function loadShipFuselageParts() {
   bindShipFuselagePartsExcluSelects();
   updateShipFuselageStats();
 }
+
+// Choix O/N par materiau : re-affiche le tableau et recalcule la Proposition.
+document.querySelectorAll('#ship-fuselage-material-filters .fuselage-material-select').forEach(sel => {
+  sel.addEventListener('change', () => {
+    renderShipFuselagePartsRows();
+    renderShipFuselageProposal(shipFuselageTargetSp);
+  });
+});
 
 // ----------------------------------------------------------
 // Panneau "Calcul des pieces de fuselage" : calcul en direct des
@@ -2340,8 +2402,10 @@ async function renderShipFuselageProposal(targetSpRaw) {
   // Materiaux exclus par defaut (Alliage X, Acier, Titane, Platinium) et
   // pieces cochees "O" manuellement : geres via la colonne "Exclu"
   // (voir SHIP_FUSELAGE_DEFAULT_EXCLUDED_GROUPS et excludedIds ci-dessus).
+  const excludedGroups = getShipFuselageExcludedGroups();
   const candidates = (shipFuselageLastCandidates || [])
-    .filter(c => !excludedIds.has(String(c.id)));
+    .filter(c => !excludedIds.has(String(c.id)))
+    .filter(c => !c.group || !excludedGroups.has(c.group));
 
   // Plafonds de quantite par taille (champs a droite du titre "Proposition") :
   // valeur saisie si valide (>= 0), sinon 0 (aucune piece de cette taille).
